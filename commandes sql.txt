@@ -1,0 +1,78 @@
+1  ==> USE FitnessManagement;
+INSERT INTO members (member_id,first_name,last_name, date_of_birth, gender, phone_number)
+VALUES (1,'Alex', 'Johnson', '1990-07-15', 'Male', '1234567890');
+
+
+2  ==>select departement_name,location from departments;
+
+
+3  ==> select * from members order by date_of_birth ASC;
+
+4  ==> SELECT DISTINCT gender FROM members;
+
+5  ==> select * from trainers  LIMIT 3 ;
+
+6  ==> select * from members  where date_of_birth> '2000-12-31' ; 
+
+7  ==> SELECT first_name,last_name FROM trainers WHERE department_id = 1 OR department_id = 2;
+
+8  ==> SELECT * FROM memberships WHERE start_date BETWEEN '2024-12-01' AND '2024-12-07';
+
+9  ==> USE FitnessManagement;
+SELECT * ,
+CASE 
+           WHEN TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) < 18 THEN 'Junior'
+           WHEN TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) BETWEEN 18 AND 26 THEN 'Adulte'
+           ELSE 'Senior'
+       END AS age_category
+FROM members ;
+
+10  ==> SELECT COUNT(appointment_id) AS total FROM appointments;
+
+11  ==> SELECT department_id, COUNT(trainer_id) AS total_trainers FROM trainers GROUP BY department_id;
+
+
+12  ==> SELECT AVG(TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE())) AS moyenne FROM members;
+
+
+13  ==> SELECT appointment_date, MAX(appointment_time) AS last_appointment_time FROM appointments WHERE appointment_date = (SELECT MAX(appointment_date) FROM appointments) GROUP BY appointment_date;
+
+
+14  ==> SELECT room_id, SUM(1) AS total_members FROM memberships GROUP BY room_id;
+
+
+15  ==> SELECT * FROM members WHERE email IS NULL;
+
+
+16  ==> SELECT 
+    appointments.appointment_id,
+    appointments.appointment_date,
+    appointments.appointment_time,
+    trainers.last_name AS trainer_last_name,
+    members.last_name AS member_last_name
+FROM appointments
+JOIN trainers ON appointments.trainer_id = trainers.trainer_id
+JOIN members ON appointments.member_id = members.member_id;
+  
+
+
+17   ==> MySQL Workbench a refuse de supprimer des lignes du table appointments a cause de safe mode pour le desactiver on doit mettre 
+la commande ""SET SQL_SAFE_UPDATES = 0;"" et apres 
+
+delete from appointments where appointment_date < 240101;
+
+
+18   ==> UPDATE departments
+SET departement_name = 'Force et Conditionnement'
+WHERE departement_name = 'Musculation';
+
+
+19  ==> SELECT gender, COUNT(*) AS total_members
+FROM members GROUP BY gender HAVING COUNT(*) >= 2;
+
+
+20  ==> create view abonnement as 
+select * from memberships where TIMESTAMPDIFF(month, start_date, CURDATE()) <1 ;
+select * from abonnement;
+
+
